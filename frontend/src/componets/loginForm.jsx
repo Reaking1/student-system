@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {useAuth} from "../hooks/useAuth"
 import {useNavigate} from "react-router"
-
+import 'LoginForm.css'
 export default function LoginForm() {
     const {login, loading} = useAuth();
     const navigate = useNavigate();
