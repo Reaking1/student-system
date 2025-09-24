@@ -1,5 +1,5 @@
 import { useState } from "react"
-import {createStudent} from "../services/studentService"
+import { registerStudent } from "../services/studentService";
 import './StudentForm.css'
 
 const StudentForm = ({ onSuccess}) => {
@@ -18,7 +18,7 @@ const StudentForm = ({ onSuccess}) => {
         setErorr(null);
 
         try {
-            await createStudent({
+            await registerStudent({
                 full_name: fullname,
                 student_id: studentId,
                 email,
