@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -11,7 +11,7 @@ function App() {
   const { user } = useAuth(); // get logged-in user
 
   return (
-    <Router>
+    <>
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -19,26 +19,57 @@ function App() {
         {/* Admin routes */}
         <Route
           path="/admin/dashboard"
-          element={user && user.role === "admin" ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={
+            user && user.role === "admin" ? (
+              <AdminDashboard />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
 
         {/* Student routes */}
         <Route
           path="/student/profile"
-          element={user && user.role === "student" ? <StudentProfile student={user} /> : <Navigate to="/login" />}
+          element={
+            user && user.role === "student" ? (
+              <StudentProfile student={user} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
         <Route
           path="/student/reports"
-          element={user && user.role === "student" ? <Reports student={user} /> : <Navigate to="/login" />}
+          element={
+            user && user.role === "student" ? (
+              <Reports student={user} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
 
         {/* Default route */}
-        <Route path="/" element={<Navigate to={user ? (user.role === "admin" ? "/admin/dashboard" : "/student/profile") : "/login"} />} />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={
+                user
+                  ? user.role === "admin"
+                    ? "/admin/dashboard"
+                    : "/student/profile"
+                  : "/login"
+              }
+            />
+          }
+        />
 
         {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
