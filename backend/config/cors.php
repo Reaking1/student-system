@@ -1,15 +1,21 @@
 <?php
-// Allow requests from your frontend
-header("Access-Control-Allow-Origin: http://localhost:5173");
+// backend/config/cors.php
 
-// Allow common HTTP methods
+// === CORS CONFIGURATION ===
+
+// Frontend origin (adjust if needed)
+$allowedOrigin = "http://localhost:5173";
+
+// Always send these headers
+header("Access-Control-Allow-Origin: $allowedOrigin");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-
-// Allow common headers
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true"); // needed if using cookies or auth headers
 
-// If this is a preflight request, stop here
+// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Optional: specify allowed headers and methods again
+    header("Access-Control-Max-Age: 86400"); // cache preflight for 1 day
     http_response_code(200);
     exit;
 }
