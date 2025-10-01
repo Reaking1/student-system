@@ -1,5 +1,9 @@
 <?php
 // backend/api/db.php
+
+// ✅ Include global CORS headers here
+require_once __DIR__ . '/../config/cors.php';
+
 require_once __DIR__ . '/../config.php';
 
 try {

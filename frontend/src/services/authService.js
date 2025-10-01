@@ -1,61 +1,31 @@
-
-
 const API_URL = "http://localhost/student-system/backend/api/auth";
 
-//_Login--
-
+// authService.js
 export async function login(username, password) {
-    try {
-        const response = await fetch(`${API_URL}/login.php`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({username,password})
-        });
+  const res = await fetch("http://localhost/student-system/backend/api/auth/login.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+    credentials: "include"
+  });
 
-        const data = await response.json()
-
-        if(!response.ok) {
-            throw new Error(data.message || "Login failed");
-        }
-
-        //Save token to localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        return data.user;
-
-    } catch (error) {
-        console.error("Login error:", error);
-    throw error;
-    }
-}
-
-
-// --- Logout ---
-export async function logout() {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    await fetch(`${API_URL}/logout.php`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    });
-
-    // Remove token and user info from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  } catch (error) {
-    console.error("Logout error:", error);
+  const data = await res.json();
+  if (data.status === "success") {
+    // 🔑 Save auth state
+    localStorage.setItem("auth", JSON.stringify(data));
   }
+  return data;
 }
 
-//--Get current user --
-export function getCurrentUser() {
-    const user = localStorage.getItem("user");
-    return user? JSON.parse(user) : null;
+export function logout() {
+  localStorage.removeItem("auth");
+  return fetch("http://localhost/student-system/backend/api/auth/logout.php", {
+    method: "POST",
+    credentials: "include"
+  });
+}
+
+export function getStoredAuth() {
+  const auth = localStorage.getItem("auth");
+  return auth ? JSON.parse(auth) : null;
 }
